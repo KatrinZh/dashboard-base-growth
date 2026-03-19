@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аудиторія — дашборд</title>
+<title>Авдиторія — дашборд</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -18,19 +18,29 @@
   header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
   .title-block h1 { font-size: 22px; font-weight: 500; }
   .title-block p { font-size: 13px; color: var(--muted); margin-top: 3px; font-family: var(--mono); }
+  .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   button.btn { background: transparent; color: var(--text); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 16px; font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
   button.btn:hover { background: var(--surface2); }
   button.btn.accent { background: var(--accent); color: #0f0f11; border-color: var(--accent); }
   button.btn.accent:hover { opacity: 0.85; }
+  button.btn.danger { border-color: rgba(224,90,90,0.4); color: var(--neg); }
+  button.btn.danger:hover { background: rgba(224,90,90,0.1); }
   .period-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
   .period-tabs button { background: var(--surface); border: 0.5px solid var(--border); color: var(--muted); border-radius: 8px; padding: 6px 16px; font-size: 12px; font-family: var(--mono); cursor: pointer; transition: all 0.15s; }
   .period-tabs button.active { background: var(--surface2); color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+  /* Metrics */
   .metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 2rem; }
-  .metric-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .metric-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 14px 16px; transition: border-color 0.15s; }
+  .metric-card:hover { border-color: rgba(255,255,255,0.15); }
   .metric-label { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-label a { color: var(--muted); text-decoration: none; border-bottom: 0.5px solid rgba(255,255,255,0.15); transition: color 0.15s, border-color 0.15s; }
+  .metric-label a:hover { color: var(--accent); border-color: var(--accent); }
   .metric-value { font-size: 22px; font-weight: 500; letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px; }
   .metric-delta { font-size: 12px; font-family: var(--mono); font-weight: 500; }
   .metric-delta.pos { color: var(--pos); } .metric-delta.neg { color: var(--neg); } .metric-delta.neutral { color: var(--muted); }
+
+  /* Charts */
   .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 2rem; }
   @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } }
   .chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; }
@@ -48,6 +58,25 @@
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
   .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
   .accent-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: middle; }
+
+  /* Data table */
+  .table-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 2rem; overflow-x: auto; }
+  .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--mono); min-width: 700px; }
+  th { color: var(--muted); font-weight: 400; text-align: right; padding: 6px 10px; border-bottom: 0.5px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+  th:first-child { text-align: left; }
+  td { text-align: right; padding: 8px 10px; border-bottom: 0.5px solid rgba(255,255,255,0.04); color: var(--text); }
+  td:first-child { text-align: left; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+  .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+  .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 4px; transition: background 0.15s; color: var(--muted); }
+  .icon-btn:hover { background: var(--surface2); color: var(--text); }
+  .icon-btn.del:hover { color: var(--neg); }
+  .base-row td { opacity: 0.6; }
+  .base-row td:first-child { font-style: italic; }
+
+  /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 100; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 2rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
@@ -69,17 +98,22 @@
     <h1><span class="accent-dot"></span>Приріст аудиторії</h1>
     <p id="subtitle"></p>
   </div>
-  <button class="btn accent" onclick="openModal()">+ Додати тиждень</button>
+  <div class="header-btns">
+    <button class="btn" onclick="toggleTable()">📋 Всі дані</button>
+    <button class="btn accent" onclick="openModal(null)">+ Додати тиждень</button>
+  </div>
 </header>
 
 <div class="period-tabs" id="periodTabs"></div>
 <div class="metrics" id="metrics"></div>
 <div class="charts-grid" id="chartsGrid"></div>
+<div id="tableSection" style="display:none"></div>
 
+<!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <h2>Новий тиждень</h2>
-    <p>Внеси дані щопонеділка</p>
+    <h2 id="modalTitle">Новий тиждень</h2>
+    <p id="modalSubtitle">Внеси дані щопонеділка</p>
     <div class="form-grid">
       <div class="form-field full"><label>Дата</label><input type="text" id="f-date" placeholder="10.03.2026"></div>
       <div class="form-field"><label>Смартсендер</label><input type="number" id="f-smart"></div>
@@ -93,25 +127,28 @@
     </div>
     <div class="modal-btns">
       <button class="btn" onclick="closeModal()">Скасувати</button>
-      <button class="btn accent" onclick="addRow()">Зберегти</button>
+      <button class="btn accent" onclick="saveRow()">Зберегти</button>
     </div>
   </div>
 </div>
 
 <script>
 const CHANNELS = [
-  { key: 'smart', label: 'Смартсендер', color: '#7c6ff7' },
-  { key: 'send',  label: 'Сендпульс',   color: '#4dba87' },
-  { key: 'tgj',   label: 'ТГ Журнал',   color: '#5ba3e0' },
-  { key: 'tgsh',  label: 'ТГ Щоденник', color: '#e0a84d' },
-  { key: 'tto',   label: 'ТТ основа',   color: '#d45fa0' },
-  { key: 'ttl',   label: 'ТТ лайф',     color: '#888' },
-  { key: 'yt',    label: 'Ютуб',         color: '#e05a5a' },
-  { key: 'ig',    label: 'Інстаграм',   color: '#c8f060' },
+  { key: 'smart', label: 'Смартсендер', color: '#7c6ff7', url: null },
+  { key: 'send',  label: 'Сендпульс',   color: '#4dba87', url: null },
+  { key: 'tgj',   label: 'ТГ Журнал',   color: '#5ba3e0', url: null },
+  { key: 'tgsh',  label: 'ТГ Щоденник', color: '#e0a84d', url: null },
+  { key: 'tto',   label: 'ТТ основа',   color: '#d45fa0', url: 'https://www.tiktok.com/@plitkarka_online' },
+  { key: 'ttl',   label: 'ТТ лайф',     color: '#888',    url: 'https://www.tiktok.com/@plitkarka_life' },
+  { key: 'yt',    label: 'Ютуб',         color: '#e05a5a', url: 'https://www.youtube.com/@kateryna_borysenko' },
+  { key: 'ig',    label: 'Інстаграм',   color: '#c8f060', url: 'https://www.instagram.com/kateryna_borysenko/' },
 ];
+
 const PERIODS = [{ label: '1 міс', n: 4 }, { label: '3 міс', n: 9 }, { label: 'Все', n: 999 }];
 let activePeriod = 2;
 let charts = {};
+let editingIdx = null;
+let showTable = false;
 
 const BASE = [
   {date:'04.03.2025',smart:15985,send:11332,tgj:16007,tgsh:1449,tto:1411,ttl:57,yt:5009,ig:83400},
@@ -149,23 +186,22 @@ const BASE = [
   {date:'02.03.2026',smart:24325,send:17954,tgj:21888,tgsh:1430,tto:2589,ttl:91,yt:7660,ig:140000},
 ];
 
-function loadData() {
-  try { const s = localStorage.getItem('audienceRows'); return s ? [...BASE, ...JSON.parse(s)] : [...BASE]; }
-  catch { return [...BASE]; }
-}
-
-function saveExtra(extra) {
-  try { localStorage.setItem('audienceRows', JSON.stringify(extra)); } catch {}
-}
-
 let extraRows = [];
 try { extraRows = JSON.parse(localStorage.getItem('audienceRows') || '[]'); } catch {}
 let allData = [...BASE, ...extraRows];
+
+function saveExtra() { try { localStorage.setItem('audienceRows', JSON.stringify(extraRows)); } catch {} }
 
 function fmt(n) { return Math.abs(n) >= 1000 ? (n/1000).toFixed(1)+'k' : Math.round(n).toLocaleString('uk'); }
 function dc(d) { return d > 0 ? 'pos' : d < 0 ? 'neg' : 'neutral'; }
 function ds(d) { return (d >= 0 ? '+' : '') + fmt(d); }
 function getSlice() { const n = PERIODS[activePeriod].n; return allData.slice(-Math.min(n, allData.length)); }
+
+function chLabel(ch) {
+  return ch.url
+    ? `<a href="${ch.url}" target="_blank" rel="noopener">${ch.label}</a>`
+    : ch.label;
+}
 
 function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} }); charts = {}; }
 
@@ -178,7 +214,11 @@ function render() {
 
   document.getElementById('metrics').innerHTML = CHANNELS.map(ch => {
     const cur = last[ch.key]||0, prev = first[ch.key]||0, delta = cur-prev;
-    return `<div class="metric-card"><div class="metric-label">${ch.label}</div><div class="metric-value">${fmt(cur)}</div><div class="metric-delta ${dc(delta)}">${ds(delta)}</div></div>`;
+    return `<div class="metric-card">
+      <div class="metric-label">${chLabel(ch)}</div>
+      <div class="metric-value">${fmt(cur)}</div>
+      <div class="metric-delta ${dc(delta)}">${ds(delta)}</div>
+    </div>`;
   }).join('');
 
   document.getElementById('chartsGrid').innerHTML = `
@@ -211,31 +251,101 @@ function render() {
     data: { labels: CHANNELS.map(c => c.label), datasets: [{ data: pctData, backgroundColor: pctData.map((v,i) => v >= 0 ? CHANNELS[i].color : '#e05a5a'), borderRadius: 4, borderSkipped: false }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#22222a', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#f0ede8', bodyColor: '#7a7880', titleFont: { family: 'DM Mono', size: 11 }, bodyFont: { family: 'DM Mono', size: 11 }, callbacks: { label: ctx => ' ' + ctx.raw.toFixed(1) + '%' } } }, scales: { x: { ticks: { color: '#7a7880', font: { size: 9, family: 'DM Mono' }, maxRotation: 40 }, grid: { display: false } }, y: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
   });
+
+  if (showTable) renderTable();
+}
+
+function renderTable() {
+  const sec = document.getElementById('tableSection');
+  const keys = CHANNELS.map(c => c.key);
+  const rows = [...allData].reverse().map((row, revIdx) => {
+    const realIdx = allData.length - 1 - revIdx;
+    const isBase = realIdx < BASE.length;
+    const extraIdx = isBase ? null : realIdx - BASE.length;
+    const actions = isBase
+      ? `<td><span style="font-size:11px;color:var(--muted);font-family:var(--mono)">базові</span></td>`
+      : `<td><div class="row-actions">
+          <button class="icon-btn" onclick="openModal(${extraIdx})" title="Редагувати">✏️</button>
+          <button class="icon-btn del" onclick="deleteRow(${extraIdx})" title="Видалити">🗑</button>
+        </div></td>`;
+    return `<tr class="${isBase ? 'base-row' : ''}">
+      <td>${row.date}</td>
+      ${keys.map(k => `<td>${(row[k]||0).toLocaleString('uk')}</td>`).join('')}
+      ${actions}
+    </tr>`;
+  }).join('');
+
+  sec.innerHTML = `<div class="table-card">
+    <div class="table-header">
+      <div class="chart-title" style="margin:0">Всі записи (${allData.length})</div>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Дата</th>
+        ${CHANNELS.map(c => `<th>${c.label}</th>`).join('')}
+        <th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+function toggleTable() {
+  showTable = !showTable;
+  document.getElementById('tableSection').style.display = showTable ? 'block' : 'none';
+  if (showTable) renderTable();
+}
+
+function openModal(extraIdx) {
+  editingIdx = extraIdx;
+  const isEdit = extraIdx !== null;
+  document.getElementById('modalTitle').textContent = isEdit ? 'Редагувати запис' : 'Новий тиждень';
+  document.getElementById('modalSubtitle').textContent = isEdit ? 'Зміни збережуться одразу' : 'Внеси дані щопонеділка';
+
+  if (isEdit) {
+    const row = extraRows[extraIdx];
+    document.getElementById('f-date').value = row.date;
+    ['smart','send','tgj','tgsh','tto','ttl','yt','ig'].forEach(k => document.getElementById('f-'+k).value = row[k]||'');
+  } else {
+    const last = allData[allData.length-1];
+    document.getElementById('f-date').value = '';
+    ['smart','send','tgj','tgsh','tto','ttl','yt','ig'].forEach(k => { document.getElementById('f-'+k).value = ''; document.getElementById('f-'+k).placeholder = last[k]||''; });
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editingIdx = null; }
+
+function saveRow() {
+  const date = document.getElementById('f-date').value.trim();
+  if (!date) { alert('Введи дату!'); return; }
+  const row = { date, smart: +document.getElementById('f-smart').value||0, send: +document.getElementById('f-send').value||0, tgj: +document.getElementById('f-tgj').value||0, tgsh: +document.getElementById('f-tgsh').value||0, tto: +document.getElementById('f-tto').value||0, ttl: +document.getElementById('f-ttl').value||0, yt: +document.getElementById('f-yt').value||0, ig: +document.getElementById('f-ig').value||0 };
+
+  if (editingIdx !== null) {
+    extraRows[editingIdx] = row;
+  } else {
+    extraRows.push(row);
+  }
+  allData = [...BASE, ...extraRows];
+  saveExtra();
+  closeModal();
+  render();
+  if (showTable) renderTable();
+}
+
+function deleteRow(extraIdx) {
+  if (!confirm('Видалити цей запис?')) return;
+  extraRows.splice(extraIdx, 1);
+  allData = [...BASE, ...extraRows];
+  saveExtra();
+  render();
+  if (showTable) renderTable();
 }
 
 function renderTabs() {
   document.getElementById('periodTabs').innerHTML = PERIODS.map((p,i) => `<button class="${i===activePeriod?'active':''}" onclick="setPeriod(${i})">${p.label}</button>`).join('');
 }
 function setPeriod(i) { activePeriod = i; renderTabs(); render(); }
-
-function openModal() {
-  const last = allData[allData.length-1];
-  ['smart','send','tgj','tgsh','tto','ttl','yt','ig'].forEach(k => { document.getElementById('f-'+k).placeholder = last[k] || ''; document.getElementById('f-'+k).value = ''; });
-  document.getElementById('f-date').value = '';
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-
-function addRow() {
-  const date = document.getElementById('f-date').value.trim();
-  if (!date) { alert('Введи дату!'); return; }
-  const row = { date, smart: +document.getElementById('f-smart').value||0, send: +document.getElementById('f-send').value||0, tgj: +document.getElementById('f-tgj').value||0, tgsh: +document.getElementById('f-tgsh').value||0, tto: +document.getElementById('f-tto').value||0, ttl: +document.getElementById('f-ttl').value||0, yt: +document.getElementById('f-yt').value||0, ig: +document.getElementById('f-ig').value||0 };
-  extraRows.push(row);
-  allData = [...BASE, ...extraRows];
-  saveExtra(extraRows);
-  closeModal();
-  render();
-}
 
 document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 renderTabs();
