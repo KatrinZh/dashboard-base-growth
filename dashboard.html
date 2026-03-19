@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аудиторія — дашборд</title>
+<title>Авдиторія — дашборд</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -290,7 +290,7 @@
 
 <script>
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcsRsrdGPa3RCRmhHWM8oadnlnpuvs0vg2ZTJjXwicdqxGzncZEQ7jPvBs61_n1dAt1yLlQKCzlcSH/pub?output=csv';
-const CSV_URL = 'https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV);
+const CSV_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV);
 
 const CHANNELS = [
   { key: 0, label: 'Смартсендер', color: '#7c6ff7' },
