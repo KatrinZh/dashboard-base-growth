@@ -3,273 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Авдиторія — дашборд</title>
+<title>Аудиторія — дашборд</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0f0f11;
-    --surface: #18181c;
-    --surface2: #22222a;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0ede8;
-    --muted: #7a7880;
-    --accent: #c8f060;
-    --accent2: #7c6ff7;
-    --pos: #4dba87;
-    --neg: #e05a5a;
-    --font: 'DM Sans', sans-serif;
-    --mono: 'DM Mono', monospace;
+    --bg: #0f0f11; --surface: #18181c; --surface2: #22222a;
+    --border: rgba(255,255,255,0.07); --text: #f0ede8; --muted: #7a7880;
+    --accent: #c8f060; --pos: #4dba87; --neg: #e05a5a;
+    --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
   }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font);
-    min-height: 100vh;
-    padding: 2rem 1.5rem;
-  }
-
-  header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .title-block h1 {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.3px;
-  }
-
-  .title-block p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 3px;
-    font-family: var(--mono);
-  }
-
-  #refreshBtn {
-    background: var(--accent);
-    color: #0f0f11;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-family: var(--font);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-  #refreshBtn:hover { opacity: 0.85; }
-  #refreshBtn:disabled { opacity: 0.4; cursor: default; }
-
-  .period-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 1.5rem;
-  }
-
-  .period-tabs button {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    color: var(--muted);
-    border-radius: 8px;
-    padding: 6px 16px;
-    font-size: 12px;
-    font-family: var(--mono);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .period-tabs button.active {
-    background: var(--surface2);
-    color: var(--text);
-    border-color: rgba(255,255,255,0.15);
-  }
-
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-    margin-bottom: 2rem;
-  }
-
-  .metric-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    transition: border-color 0.2s;
-  }
-
-  .metric-card:hover { border-color: rgba(255,255,255,0.15); }
-
-  .metric-label {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .metric-value {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.5px;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .metric-delta {
-    font-size: 12px;
-    font-family: var(--mono);
-    font-weight: 500;
-  }
-
-  .metric-delta.pos { color: var(--pos); }
-  .metric-delta.neg { color: var(--neg); }
-  .metric-delta.neutral { color: var(--muted); }
-
-  .charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 2rem;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; padding: 2rem 1.5rem; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+  .title-block h1 { font-size: 22px; font-weight: 500; }
+  .title-block p { font-size: 13px; color: var(--muted); margin-top: 3px; font-family: var(--mono); }
+  button.btn { background: transparent; color: var(--text); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 16px; font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  button.btn:hover { background: var(--surface2); }
+  button.btn.accent { background: var(--accent); color: #0f0f11; border-color: var(--accent); }
+  button.btn.accent:hover { opacity: 0.85; }
+  .period-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+  .period-tabs button { background: var(--surface); border: 0.5px solid var(--border); color: var(--muted); border-radius: 8px; padding: 6px 16px; font-size: 12px; font-family: var(--mono); cursor: pointer; transition: all 0.15s; }
+  .period-tabs button.active { background: var(--surface2); color: var(--text); border-color: rgba(255,255,255,0.15); }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+  .metric-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .metric-label { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-value { font-size: 22px; font-weight: 500; letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px; }
+  .metric-delta { font-size: 12px; font-family: var(--mono); font-weight: 500; }
+  .metric-delta.pos { color: var(--pos); } .metric-delta.neg { color: var(--neg); } .metric-delta.neutral { color: var(--muted); }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 2rem; }
   @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } }
-
-  .chart-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-  }
-
+  .chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 20px; }
   .chart-card.full { grid-column: 1 / -1; }
-
-  .chart-title {
-    font-size: 12px;
-    font-family: var(--mono);
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
-  }
-
+  .chart-title { font-size: 12px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
   .chart-wrap { position: relative; width: 100%; }
-  .chart-wrap.tall { height: 280px; }
-  .chart-wrap.short { height: 200px; }
-
+  .chart-wrap.tall { height: 280px; } .chart-wrap.short { height: 200px; }
   .bar-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .bar-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-  }
-
-  .bar-name {
-    width: 100px;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 11px;
-    flex-shrink: 0;
-    text-align: right;
-  }
-
-  .bar-track {
-    flex: 1;
-    height: 18px;
-    background: var(--surface2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.5s ease;
-  }
-
-  .bar-val {
-    min-width: 55px;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 14px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .status {
-    text-align: center;
-    padding: 3rem;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 13px;
-  }
-
-  .dot-pulse {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-right: 8px;
-    animation: pulse 1.2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
-  }
-
-  .last-updated {
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--muted);
-    text-align: right;
-    margin-top: 1.5rem;
-  }
-
-  .accent-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-right: 6px;
-    vertical-align: middle;
-  }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-name { width: 100px; color: var(--muted); font-family: var(--mono); font-size: 11px; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 18px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { min-width: 55px; font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .accent-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: middle; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 2rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-size: 18px; font-weight: 500; margin-bottom: 6px; }
+  .modal p { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; font-family: var(--mono); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 11px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-field input { background: var(--surface2); border: 0.5px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; color: var(--text); font-family: var(--mono); font-size: 13px; outline: none; transition: border-color 0.15s; width: 100%; }
+  .form-field input:focus { border-color: rgba(255,255,255,0.3); }
+  .form-field.full { grid-column: 1 / -1; }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
 </style>
 </head>
 <body>
@@ -277,257 +67,179 @@
 <header>
   <div class="title-block">
     <h1><span class="accent-dot"></span>Приріст аудиторії</h1>
-    <p id="subtitle">завантаження даних...</p>
+    <p id="subtitle"></p>
   </div>
-  <button id="refreshBtn" onclick="loadData()">↻ Оновити</button>
+  <button class="btn accent" onclick="openModal()">+ Додати тиждень</button>
 </header>
 
 <div class="period-tabs" id="periodTabs"></div>
+<div class="metrics" id="metrics"></div>
+<div class="charts-grid" id="chartsGrid"></div>
 
-<div id="root"><div class="status"><span class="dot-pulse"></span>Завантажую дані з Google Sheets...</div></div>
-
-<div class="last-updated" id="lastUpdated"></div>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Новий тиждень</h2>
+    <p>Внеси дані щопонеділка</p>
+    <div class="form-grid">
+      <div class="form-field full"><label>Дата</label><input type="text" id="f-date" placeholder="10.03.2026"></div>
+      <div class="form-field"><label>Смартсендер</label><input type="number" id="f-smart"></div>
+      <div class="form-field"><label>Сендпульс</label><input type="number" id="f-send"></div>
+      <div class="form-field"><label>ТГ Журнал</label><input type="number" id="f-tgj"></div>
+      <div class="form-field"><label>ТГ Щоденник</label><input type="number" id="f-tgsh"></div>
+      <div class="form-field"><label>ТТ основа</label><input type="number" id="f-tto"></div>
+      <div class="form-field"><label>ТТ лайф</label><input type="number" id="f-ttl"></div>
+      <div class="form-field"><label>Ютуб</label><input type="number" id="f-yt"></div>
+      <div class="form-field"><label>Інстаграм</label><input type="number" id="f-ig"></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal()">Скасувати</button>
+      <button class="btn accent" onclick="addRow()">Зберегти</button>
+    </div>
+  </div>
+</div>
 
 <script>
-const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcsRsrdGPa3RCRmhHWM8oadnlnpuvs0vg2ZTJjXwicdqxGzncZEQ7jPvBs61_n1dAt1yLlQKCzlcSH/pub?output=csv';
-const CSV_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV);
-
 const CHANNELS = [
-  { key: 0, label: 'Смартсендер', color: '#7c6ff7' },
-  { key: 1, label: 'Сендпульс',   color: '#4dba87' },
-  { key: 2, label: 'ТГ Журнал',   color: '#5ba3e0' },
-  { key: 3, label: 'ТГ Щоденник', color: '#e0a84d' },
-  { key: 4, label: 'ТТ основа',   color: '#d45fa0' },
-  { key: 5, label: 'ТТ лайф',     color: '#888' },
-  { key: 6, label: 'Ютуб',         color: '#e05a5a' },
-  { key: 7, label: 'Інстаграм',   color: '#c8f060' },
+  { key: 'smart', label: 'Смартсендер', color: '#7c6ff7' },
+  { key: 'send',  label: 'Сендпульс',   color: '#4dba87' },
+  { key: 'tgj',   label: 'ТГ Журнал',   color: '#5ba3e0' },
+  { key: 'tgsh',  label: 'ТГ Щоденник', color: '#e0a84d' },
+  { key: 'tto',   label: 'ТТ основа',   color: '#d45fa0' },
+  { key: 'ttl',   label: 'ТТ лайф',     color: '#888' },
+  { key: 'yt',    label: 'Ютуб',         color: '#e05a5a' },
+  { key: 'ig',    label: 'Інстаграм',   color: '#c8f060' },
 ];
-
-const PERIODS = [
-  { label: '1 міс', n: 4 },
-  { label: '3 міс', n: 9 },
-  { label: 'Все',   n: 999 },
-];
-
-let allData = [];
+const PERIODS = [{ label: '1 міс', n: 4 }, { label: '3 міс', n: 9 }, { label: 'Все', n: 999 }];
 let activePeriod = 2;
 let charts = {};
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n').filter(l => l.trim());
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',').map(c => c.trim().replace(/"/g, ''));
-    if (!cols[0]) continue;
-    // skip delta rows (rows where date column is empty or same as previous absolute row)
-    const date = cols[0];
-    const vals = cols.slice(1, 9).map(v => parseFloat(v.replace(/\s/g, '').replace(',', '.')) || 0);
-    // only keep rows where first numeric value looks like an absolute (>100 for most channels)
-    if (vals[0] > 100 || vals[2] > 100) {
-      rows.push({ date, vals });
-    }
-  }
-  return rows;
+const BASE = [
+  {date:'04.03.2025',smart:15985,send:11332,tgj:16007,tgsh:1449,tto:1411,ttl:57,yt:5009,ig:83400},
+  {date:'10.03.2025',smart:14371,send:11676,tgj:16212,tgsh:1437,tto:1420,ttl:65,yt:5100,ig:84800},
+  {date:'17.03.2025',smart:14573,send:11980,tgj:16118,tgsh:1605,tto:1431,ttl:68,yt:5120,ig:85900},
+  {date:'24.03.2025',smart:15066,send:0,tgj:16420,tgsh:1636,tto:1435,ttl:75,yt:5130,ig:87700},
+  {date:'31.03.2025',smart:15220,send:12096,tgj:16480,tgsh:1667,tto:1440,ttl:78,yt:5220,ig:89700},
+  {date:'14.04.2025',smart:15661,send:12378,tgj:16832,tgsh:1667,tto:1436,ttl:82,yt:5250,ig:91800},
+  {date:'28.04.2025',smart:14917,send:11895,tgj:16696,tgsh:1641,tto:1441,ttl:88,yt:5280,ig:91200},
+  {date:'12.05.2025',smart:14678,send:12117,tgj:17390,tgsh:1635,tto:1587,ttl:94,yt:5280,ig:95300},
+  {date:'19.05.2025',smart:15155,send:11910,tgj:17845,tgsh:1624,tto:1782,ttl:94,yt:5280,ig:98400},
+  {date:'02.06.2025',smart:15012,send:11807,tgj:17850,tgsh:1590,tto:1835,ttl:96,yt:5300,ig:102000},
+  {date:'07.07.2025',smart:17558,send:14055,tgj:18431,tgsh:1587,tto:1954,ttl:96,yt:5410,ig:103000},
+  {date:'21.07.2025',smart:18036,send:12645,tgj:19136,tgsh:1562,tto:2061,ttl:91,yt:5460,ig:105000},
+  {date:'28.07.2025',smart:17595,send:14203,tgj:19000,tgsh:1542,tto:2026,ttl:95,yt:5480,ig:104000},
+  {date:'04.08.2025',smart:17673,send:13600,tgj:19050,tgsh:1541,tto:2045,ttl:94,yt:5480,ig:104000},
+  {date:'29.08.2025',smart:18315,send:13860,tgj:19312,tgsh:1551,tto:2055,ttl:96,yt:5780,ig:107000},
+  {date:'01.09.2025',smart:18716,send:13930,tgj:19366,tgsh:1545,tto:2054,ttl:97,yt:5800,ig:107000},
+  {date:'08.09.2025',smart:19301,send:14110,tgj:19600,tgsh:1538,tto:2065,ttl:97,yt:5830,ig:109000},
+  {date:'15.09.2025',smart:20448,send:14798,tgj:19973,tgsh:1526,tto:2962,ttl:97,yt:5950,ig:110000},
+  {date:'22.09.2025',smart:20528,send:15432,tgj:20145,tgsh:1518,tto:2080,ttl:97,yt:6060,ig:112000},
+  {date:'29.09.2025',smart:21137,send:15691,tgj:20350,tgsh:1513,tto:2090,ttl:97,yt:6100,ig:121000},
+  {date:'06.10.2025',smart:21348,send:15779,tgj:20380,tgsh:1504,tto:2091,ttl:97,yt:6120,ig:122000},
+  {date:'13.10.2025',smart:21661,send:16011,tgj:20420,tgsh:1494,tto:2123,ttl:97,yt:6200,ig:122000},
+  {date:'24.11.2025',smart:21194,send:16387,tgj:20857,tgsh:1460,tto:2151,ttl:95,yt:6420,ig:128000},
+  {date:'01.12.2025',smart:21635,send:16617,tgj:20805,tgsh:1456,tto:2156,ttl:95,yt:6530,ig:129000},
+  {date:'08.12.2025',smart:22942,send:17550,tgj:20887,tgsh:1450,tto:2380,ttl:95,yt:6590,ig:134000},
+  {date:'15.12.2025',smart:23045,send:18075,tgj:20806,tgsh:1441,tto:2389,ttl:95,yt:6690,ig:135000},
+  {date:'14.01.2026',smart:23138,send:18277,tgj:21115,tgsh:1409,tto:2452,ttl:94,yt:7180,ig:135000},
+  {date:'19.01.2026',smart:23064,send:18077,tgj:21352,tgsh:1404,tto:2468,ttl:94,yt:7310,ig:135000},
+  {date:'26.01.2026',smart:23460,send:18177,tgj:21479,tgsh:1401,tto:2486,ttl:94,yt:7430,ig:135000},
+  {date:'02.02.2026',smart:24004,send:18217,tgj:21582,tgsh:1398,tto:2514,ttl:93,yt:7520,ig:135000},
+  {date:'16.02.2026',smart:24152,send:18294,tgj:21862,tgsh:1403,tto:2562,ttl:93,yt:7600,ig:137000},
+  {date:'23.02.2026',smart:23995,send:17894,tgj:21873,tgsh:1438,tto:2589,ttl:92,yt:7630,ig:137000},
+  {date:'02.03.2026',smart:24325,send:17954,tgj:21888,tgsh:1430,tto:2589,ttl:91,yt:7660,ig:140000},
+];
+
+function loadData() {
+  try { const s = localStorage.getItem('audienceRows'); return s ? [...BASE, ...JSON.parse(s)] : [...BASE]; }
+  catch { return [...BASE]; }
 }
 
-function fmt(n) {
-  if (Math.abs(n) >= 1000) return (n/1000).toFixed(1) + 'k';
-  return Math.round(n).toLocaleString('uk');
+function saveExtra(extra) {
+  try { localStorage.setItem('audienceRows', JSON.stringify(extra)); } catch {}
 }
 
-function deltaClass(d) {
-  if (d > 0) return 'pos';
-  if (d < 0) return 'neg';
-  return 'neutral';
-}
+let extraRows = [];
+try { extraRows = JSON.parse(localStorage.getItem('audienceRows') || '[]'); } catch {}
+let allData = [...BASE, ...extraRows];
 
-function deltaStr(d) {
-  return (d >= 0 ? '+' : '') + fmt(d);
-}
+function fmt(n) { return Math.abs(n) >= 1000 ? (n/1000).toFixed(1)+'k' : Math.round(n).toLocaleString('uk'); }
+function dc(d) { return d > 0 ? 'pos' : d < 0 ? 'neg' : 'neutral'; }
+function ds(d) { return (d >= 0 ? '+' : '') + fmt(d); }
+function getSlice() { const n = PERIODS[activePeriod].n; return allData.slice(-Math.min(n, allData.length)); }
 
-function getSlice() {
-  const n = PERIODS[activePeriod].n;
-  return allData.slice(-Math.min(n, allData.length));
-}
-
-function destroyCharts() {
-  Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
-  charts = {};
-}
+function destroyCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} }); charts = {}; }
 
 function render() {
   destroyCharts();
   const slice = getSlice();
   if (!slice.length) return;
-  const first = slice[0], last = slice[slice.length - 1];
+  const first = slice[0], last = slice[slice.length-1];
+  document.getElementById('subtitle').textContent = first.date + ' → ' + last.date;
 
-  const root = document.getElementById('root');
-  root.innerHTML = `
-    <div class="metrics" id="metrics"></div>
-    <div class="charts-grid">
-      <div class="chart-card full">
-        <div class="chart-title">Динаміка підписників</div>
-        <div class="chart-wrap tall"><canvas id="lineChart"></canvas></div>
-        <div class="legend" id="lineLegend"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Приріст за період</div>
-        <div class="bar-list" id="barList"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">% приросту</div>
-        <div class="chart-wrap short"><canvas id="pctChart"></canvas></div>
-      </div>
-    </div>
-  `;
-
-  // Metrics
-  const metricsEl = document.getElementById('metrics');
-  metricsEl.innerHTML = CHANNELS.map((ch, i) => {
-    const cur = last.vals[ch.key];
-    const prev = first.vals[ch.key];
-    const delta = cur - prev;
-    return `<div class="metric-card">
-      <div class="metric-label">${ch.label}</div>
-      <div class="metric-value">${fmt(cur)}</div>
-      <div class="metric-delta ${deltaClass(delta)}">${deltaStr(delta)}</div>
-    </div>`;
+  document.getElementById('metrics').innerHTML = CHANNELS.map(ch => {
+    const cur = last[ch.key]||0, prev = first[ch.key]||0, delta = cur-prev;
+    return `<div class="metric-card"><div class="metric-label">${ch.label}</div><div class="metric-value">${fmt(cur)}</div><div class="metric-delta ${dc(delta)}">${ds(delta)}</div></div>`;
   }).join('');
 
-  // Line chart
-  const labels = slice.map(r => r.date.slice(0, 5));
-  const igIdx = CHANNELS.findIndex(c => c.label === 'Інстаграм');
-  const lineChannels = CHANNELS.filter((_, i) => i !== igIdx);
+  document.getElementById('chartsGrid').innerHTML = `
+    <div class="chart-card full"><div class="chart-title">Динаміка підписників</div><div class="chart-wrap tall"><canvas id="lineChart"></canvas></div><div class="legend" id="lineLegend"></div></div>
+    <div class="chart-card"><div class="chart-title">Приріст за період</div><div class="bar-list" id="barList"></div></div>
+    <div class="chart-card"><div class="chart-title">% приросту</div><div class="chart-wrap short"><canvas id="pctChart"></canvas></div></div>
+  `;
+
+  const labels = slice.map(r => r.date.slice(0,5));
+  const lch = CHANNELS.filter(c => c.key !== 'ig');
 
   charts.line = new Chart(document.getElementById('lineChart'), {
     type: 'line',
-    data: {
-      labels,
-      datasets: lineChannels.map(ch => ({
-        label: ch.label,
-        data: slice.map(r => r.vals[ch.key]),
-        borderColor: ch.color,
-        backgroundColor: 'transparent',
-        borderWidth: 1.5,
-        pointRadius: 2,
-        pointHoverRadius: 4,
-        tension: 0.3,
-      }))
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: '#22222a',
-        borderColor: 'rgba(255,255,255,0.08)',
-        borderWidth: 1,
-        titleColor: '#f0ede8',
-        bodyColor: '#7a7880',
-        titleFont: { family: 'DM Mono', size: 11 },
-        bodyFont: { family: 'DM Mono', size: 11 },
-      }},
-      scales: {
-        x: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, maxRotation: 45, autoSkip: true }, grid: { color: 'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, callback: v => fmt(v) }, grid: { color: 'rgba(255,255,255,0.04)' } }
-      }
-    }
+    data: { labels, datasets: lch.map(ch => ({ label: ch.label, data: slice.map(r => r[ch.key]||0), borderColor: ch.color, backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 2, tension: 0.3 })) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#22222a', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#f0ede8', bodyColor: '#7a7880', titleFont: { family: 'DM Mono', size: 11 }, bodyFont: { family: 'DM Mono', size: 11 } } }, scales: { x: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, maxRotation: 45, autoSkip: true }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, callback: v => fmt(v) }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
   });
 
-  // Legend
-  document.getElementById('lineLegend').innerHTML = lineChannels.map(ch =>
-    `<span class="legend-item"><span class="legend-dot" style="background:${ch.color}"></span>${ch.label}</span>`
-  ).join('');
+  document.getElementById('lineLegend').innerHTML = lch.map(ch => `<span class="legend-item"><span class="legend-dot" style="background:${ch.color}"></span>${ch.label}</span>`).join('');
 
-  // Bar list
-  const deltas = CHANNELS.map(ch => ({ ...ch, delta: last.vals[ch.key] - first.vals[ch.key] }))
-    .sort((a, b) => b.delta - a.delta);
+  const deltas = CHANNELS.map(ch => ({...ch, delta: (last[ch.key]||0)-(first[ch.key]||0)})).sort((a,b) => b.delta-a.delta);
   const maxAbs = Math.max(...deltas.map(d => Math.abs(d.delta)), 1);
-
   document.getElementById('barList').innerHTML = deltas.map(ch => {
-    const pct = Math.round(Math.abs(ch.delta) / maxAbs * 100);
-    const color = ch.delta >= 0 ? ch.color : '#e05a5a';
-    return `<div class="bar-row">
-      <span class="bar-name">${ch.label}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};opacity:0.9;"></div></div>
-      <span class="bar-val" style="color:${color}">${deltaStr(ch.delta)}</span>
-    </div>`;
+    const pct = Math.round(Math.abs(ch.delta)/maxAbs*100), color = ch.delta >= 0 ? ch.color : '#e05a5a';
+    return `<div class="bar-row"><span class="bar-name">${ch.label}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};opacity:0.9;"></div></div><span class="bar-val" style="color:${color}">${ds(ch.delta)}</span></div>`;
   }).join('');
 
-  // % growth chart
-  const pctData = CHANNELS.map(ch => {
-    const prev = first.vals[ch.key];
-    const cur = last.vals[ch.key];
-    return prev > 0 ? Math.round((cur - prev) / prev * 1000) / 10 : 0;
-  });
-
+  const pctData = CHANNELS.map(ch => { const p = first[ch.key]||0, c = last[ch.key]||0; return p > 0 ? Math.round((c-p)/p*1000)/10 : 0; });
   charts.pct = new Chart(document.getElementById('pctChart'), {
     type: 'bar',
-    data: {
-      labels: CHANNELS.map(c => c.label),
-      datasets: [{
-        data: pctData,
-        backgroundColor: pctData.map((v, i) => v >= 0 ? CHANNELS[i].color : '#e05a5a'),
-        borderRadius: 4,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: '#22222a',
-        borderColor: 'rgba(255,255,255,0.08)',
-        borderWidth: 1,
-        titleColor: '#f0ede8',
-        bodyColor: '#7a7880',
-        titleFont: { family: 'DM Mono', size: 11 },
-        bodyFont: { family: 'DM Mono', size: 11 },
-        callbacks: { label: ctx => ' ' + ctx.raw.toFixed(1) + '%' }
-      }},
-      scales: {
-        x: { ticks: { color: '#7a7880', font: { size: 9, family: 'DM Mono' }, maxRotation: 40 }, grid: { display: false } },
-        y: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } }
-      }
-    }
+    data: { labels: CHANNELS.map(c => c.label), datasets: [{ data: pctData, backgroundColor: pctData.map((v,i) => v >= 0 ? CHANNELS[i].color : '#e05a5a'), borderRadius: 4, borderSkipped: false }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#22222a', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#f0ede8', bodyColor: '#7a7880', titleFont: { family: 'DM Mono', size: 11 }, bodyFont: { family: 'DM Mono', size: 11 }, callbacks: { label: ctx => ' ' + ctx.raw.toFixed(1) + '%' } } }, scales: { x: { ticks: { color: '#7a7880', font: { size: 9, family: 'DM Mono' }, maxRotation: 40 }, grid: { display: false } }, y: { ticks: { color: '#7a7880', font: { size: 10, family: 'DM Mono' }, callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
   });
 }
 
-function renderPeriodTabs() {
-  document.getElementById('periodTabs').innerHTML = PERIODS.map((p, i) =>
-    `<button class="${i === activePeriod ? 'active' : ''}" onclick="setPeriod(${i})">${p.label}</button>`
-  ).join('');
+function renderTabs() {
+  document.getElementById('periodTabs').innerHTML = PERIODS.map((p,i) => `<button class="${i===activePeriod?'active':''}" onclick="setPeriod(${i})">${p.label}</button>`).join('');
 }
+function setPeriod(i) { activePeriod = i; renderTabs(); render(); }
 
-function setPeriod(i) {
-  activePeriod = i;
-  renderPeriodTabs();
+function openModal() {
+  const last = allData[allData.length-1];
+  ['smart','send','tgj','tgsh','tto','ttl','yt','ig'].forEach(k => { document.getElementById('f-'+k).placeholder = last[k] || ''; document.getElementById('f-'+k).value = ''; });
+  document.getElementById('f-date').value = '';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function addRow() {
+  const date = document.getElementById('f-date').value.trim();
+  if (!date) { alert('Введи дату!'); return; }
+  const row = { date, smart: +document.getElementById('f-smart').value||0, send: +document.getElementById('f-send').value||0, tgj: +document.getElementById('f-tgj').value||0, tgsh: +document.getElementById('f-tgsh').value||0, tto: +document.getElementById('f-tto').value||0, ttl: +document.getElementById('f-ttl').value||0, yt: +document.getElementById('f-yt').value||0, ig: +document.getElementById('f-ig').value||0 };
+  extraRows.push(row);
+  allData = [...BASE, ...extraRows];
+  saveExtra(extraRows);
+  closeModal();
   render();
 }
 
-async function loadData() {
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled = true;
-  btn.textContent = '↻ Завантажую...';
-
-  try {
-    const res = await fetch(CSV_URL);
-    const text = await res.text();
-    allData = parseCSV(text);
-
-    if (!allData.length) throw new Error('Немає даних');
-
-    const last = allData[allData.length - 1];
-    document.getElementById('subtitle').textContent = `останні дані: ${last.date}`;
-    document.getElementById('lastUpdated').textContent = 'оновлено: ' + new Date().toLocaleString('uk');
-    renderPeriodTabs();
-    render();
-  } catch(e) {
-    document.getElementById('root').innerHTML = `<div class="status">⚠ Не вдалося завантажити дані.<br>Перевір що таблиця опублікована (Файл → Опублікувати в інтернеті).</div>`;
-  }
-
-  btn.disabled = false;
-  btn.textContent = '↻ Оновити';
-}
-
-loadData();
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+renderTabs();
+render();
 </script>
 </body>
 </html>
